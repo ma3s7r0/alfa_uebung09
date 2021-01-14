@@ -1,25 +1,50 @@
-import logo from './logo.svg';
+import { connect } from 'react-redux';
+import { BrowserRouter, Route } from 'react-router-dom';
 import './App.css';
+import Cart from './components/Cart';
+import Nav from './components/Nav';
+import Table from './components/Table';
+import Select from './components/Select';
 
-function App() {
+function App(probs) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div id="container">
+      <header>
+        <h1>Bücher und Mehr</h1>
       </header>
+      <BrowserRouter>
+            <>
+                <Nav />
+                <main>
+                    <Route path="/shop" exact component={Select} />
+                    {(probs.selA !== "-1" && probs.selB !== "-1") &&
+                    <>
+                      <Route path="/shop" exact component={Table} />
+                      <Route path="/cart" exact component={Cart} />                    
+                    </>
+                    } 
+                </main>
+            </>
+        </BrowserRouter>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state, props) => {
+  return {
+    ...props,
+    /* alle Eigenschaften des State: */
+    ...state
+    /* nur eine Eigenschaft des State:
+    vorname : state.vorname
+    */
+  }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    ...props,
+    }
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps) (App);
